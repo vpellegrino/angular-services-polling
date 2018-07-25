@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-hello-world": {
+    "angular-services-polling": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -47,18 +47,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "angular-hello-world:build"
+            "browserTarget": "angular-services-polling:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "angular-hello-world:build:production"
+              "browserTarget": "angular-services-polling:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "angular-hello-world:build"
+            "browserTarget": "angular-services-polling:build"
           }
         },
         "test": {
@@ -91,7 +91,7 @@
         }
       }
     },
-    "angular-hello-world-e2e": {
+    "angular-services-polling-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -100,7 +100,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "angular-hello-world:serve"
+            "devServerTarget": "angular-services-polling:serve"
           }
         },
         "lint": {
@@ -117,7 +117,7 @@
       }
     }
   },
-  "defaultProject": "angular-hello-world",
+  "defaultProject": "angular-services-polling",
   "schematics": {
     "@schematics/angular:class": {
       "spec": false
