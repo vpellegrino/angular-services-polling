@@ -1,9 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
-import {NavbarNotifications} from './navbar-notifications.component';
-import {PollingService} from "./services/polling.service";
-import {NotificationsService} from "./services/notifications.service";
+import {NavbarNotifications} from './notifications/components/navbar-notifications.component';
+import {PollingService} from "./polling/services/polling.service";
+import {NotificationsService} from "./notifications/services/notifications.service";
 import {HttpClientModule} from '@angular/common/http';
 import {BsDropdownModule} from "ngx-bootstrap";
 

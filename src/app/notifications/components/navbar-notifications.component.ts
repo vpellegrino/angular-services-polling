@@ -4,10 +4,10 @@
 
 import {AfterViewChecked, Component, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
 import {Subject} from "rxjs";
-import {Notification} from "./models/notification";
+import {Notification} from "../models/notification";
 import {PopoverDirective} from "ngx-bootstrap";
-import {NotificationsService} from "./services/notifications.service";
-import {PollingService} from "./services/polling.service";
+import {NotificationsService} from "../services/notifications.service";
+import {PollingService} from "../../polling/services/polling.service";
 
 @Component({
     selector: 'navbar-notifications',
