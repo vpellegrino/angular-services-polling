@@ -10,23 +10,30 @@ import {NotificationsService} from "./services/notifications.service";
 import {PollingService} from "./services/polling.service";
 
 @Component({
-    selector: 'app-root',
+    selector: 'navbar-notifications',
     template:
-            `
-        <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg" *dropdownMenu aria-labelledby="simple-dropdown" (click)="$event.stopPropagation()">
-            <ng-container *ngFor="let notification of notifications; let i=index">
-                <ng-template #popTemplate>
-                    {{notification.description}}
-                </ng-template>
-                <span><i class="fa" [ngClass]="ns.getNotificationIcon(notification.category)"></i>{{notification.title}}
-                    <i (click)="ns.markNotificationAsRead(notifications, notification.id)" title="{{ns.getMarkNotificationAsReadTitle()}}" class="check-notification icon-check"></i>
-                  </span>
-                <small class="notification-age">{{ns.displayNotificationAge(notification.created_at)}}</small>
-            </ng-container>
-        </div>
-    `,
+        `
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item dropdown d-md-down-none" dropdown #dropdown="bs-dropdown" placement="bottom right">
+                <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+                  <i class="icon-bell"></i><span class="badge badge-pill badge-danger">{{notifications && notifications.length}}</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg" *dropdownMenu aria-labelledby="simple-dropdown" (click)="$event.stopPropagation()">
+                    <ng-container *ngFor="let notification of notifications; let i=index">
+                        <ng-template #popTemplate>
+                            {{notification.description}}
+                        </ng-template>
+                        <span><i class="fa" [ngClass]="ns.getNotificationIcon(notification.category)"></i>{{notification.title}}
+                            <i (click)="ns.markNotificationAsRead(notifications, notification.id)" title="{{ns.getMarkNotificationAsReadTitle()}}" class="check-notification icon-check"></i>
+                          </span>
+                        <small class="notification-age">{{ns.displayNotificationAge(notification.created_at)}}</small>
+                    </ng-container>
+                </div>
+            </li>
+        </ul>
+        `,
     styles: [
-            `
+        `
             small.notification-age {
                 margin-top: 3px;
                 margin-left: -5px;
@@ -46,7 +53,7 @@ import {PollingService} from "./services/polling.service";
     ]
 })
 
-export class AppComponent implements AfterViewChecked, OnInit, OnDestroy {
+export class NavbarNotifications implements AfterViewChecked, OnInit, OnDestroy {
 
     private destroy$: Subject<boolean> = new Subject<boolean>();
     public notifications: Notification[];

@@ -26,6 +26,10 @@ main {
     background-color: #fafafa;
 }
 
+.navbar-inner navbar-notifications {
+    float: right;
+}
+
 footer {
     margin-top: 15px;
 }

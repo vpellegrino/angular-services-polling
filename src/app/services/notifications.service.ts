@@ -55,7 +55,7 @@ export class NotificationsService {
      * @return {string}
      */
     public displayNotificationAge(createdAt: string): string {
-        return moment(createdAt).fromNow()
+        return moment(createdAt, 'YYYY-MM-DD HH:mm:ss').fromNow()
     }
 
     /**
