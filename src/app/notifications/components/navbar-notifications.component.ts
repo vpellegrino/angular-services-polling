@@ -2,10 +2,9 @@
  * Created by vpellegr on 20/07/2018.
  */
 
-import {AfterViewChecked, Component, OnDestroy, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from "rxjs";
 import {Notification} from "../models/notification";
-import {PopoverDirective} from "ngx-bootstrap";
 import {NotificationsService} from "../services/notifications.service";
 import {PollingService} from "../../polling/services/polling.service";
 
@@ -23,10 +22,12 @@ import {PollingService} from "../../polling/services/polling.service";
                         <ng-template #popTemplate>
                             {{notification.description}}
                         </ng-template>
-                        <span><i class="fa" [ngClass]="ns.getNotificationIcon(notification.category)"></i>{{notification.title}}
-                            <i (click)="ns.markNotificationAsRead(notifications, notification.id)" title="{{ns.getMarkNotificationAsReadTitle()}}" class="check-notification icon-check"></i>
-                          </span>
-                        <small class="notification-age">{{ns.displayNotificationAge(notification.created_at)}}</small>
+                        <a [popover]="popTemplate" [outsideClick]="true" placement="left" class="notification-item dropdown-item" *ngIf="i<5">
+                            <span><i class="fa" [ngClass]="ns.getNotificationIcon(notification.category)"></i>{{notification.title}}
+                                <i (click)="ns.markNotificationAsRead(notifications, notification.id)" title="{{ns.getMarkNotificationAsReadTitle()}}" class="check-notification icon-check"></i>
+                              </span>
+                            <small class="notification-age">{{ns.displayNotificationAge(notification.created_at)}}</small>
+                        </a>
                     </ng-container>
                 </div>
             </li>
@@ -53,27 +54,14 @@ import {PollingService} from "../../polling/services/polling.service";
     ]
 })
 
-export class NavbarNotifications implements AfterViewChecked, OnInit, OnDestroy {
+export class NavbarNotifications implements OnInit, OnDestroy {
 
     private destroy$: Subject<boolean> = new Subject<boolean>();
     public notifications: Notification[];
     public ns: NotificationsService;
 
-    @ViewChildren(PopoverDirective) popovers: QueryList<PopoverDirective>;
-
     constructor(private pollingService: PollingService, notificationsService: NotificationsService) {
         this.ns = notificationsService;
-    }
-
-    ngAfterViewChecked() {
-        // dismiss other popovers, except the one that is showing now
-        this.popovers.forEach((popover: PopoverDirective) => {
-            popover.onShown.subscribe(() => {
-                this.popovers
-                    .filter(p => p !== popover)
-                    .forEach(p => p.hide());
-            });
-        });
     }
 
     ngOnInit() {

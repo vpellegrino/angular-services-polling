@@ -5,7 +5,7 @@ import {NavbarNotifications} from './notifications/components/navbar-notificatio
 import {PollingService} from "./polling/services/polling.service";
 import {NotificationsService} from "./notifications/services/notifications.service";
 import {HttpClientModule} from '@angular/common/http';
-import {BsDropdownModule} from "ngx-bootstrap";
+import {BsDropdownModule, PopoverModule} from "ngx-bootstrap";
 
 @NgModule({
     declarations: [
@@ -16,6 +16,7 @@ import {BsDropdownModule} from "ngx-bootstrap";
         AppRoutingModule,
         HttpClientModule,
         BsDropdownModule.forRoot(),
+        PopoverModule.forRoot()
     ],
     providers: [
         PollingService,
