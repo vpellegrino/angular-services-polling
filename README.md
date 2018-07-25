@@ -1,5 +1,4 @@
-# 
-
+# Angular Services Polling
 
 ## Running the Application
 
@@ -9,4 +8,4 @@
 
 1. Run `npm install`
 
-1. Run `ng serve -o`
+1. Run `npm start`
