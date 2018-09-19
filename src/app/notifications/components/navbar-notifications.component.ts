@@ -22,12 +22,12 @@ import {PollingService} from "../../polling/services/polling.service";
                         <ng-template #popTemplate>
                             {{notification.description}}
                         </ng-template>
-                        <a [popover]="popTemplate" [outsideClick]="true" placement="left" class="notification-item dropdown-item" *ngIf="i<5">
+                        <div [popover]="popTemplate" [outsideClick]="true" placement="left" class="notification-item dropdown-item" *ngIf="i<5">
                             <span><i class="fa" [ngClass]="ns.getNotificationIcon(notification.category)"></i>{{notification.title}}
                                 <i (click)="ns.markNotificationAsRead(notifications, notification.id)" title="{{ns.getMarkNotificationAsReadTitle()}}" class="check-notification icon-check"></i>
                               </span>
                             <small class="notification-age">{{ns.displayNotificationAge(notification.created_at)}}</small>
-                        </a>
+                        </div>
                     </ng-container>
                 </div>
             </li>
@@ -35,9 +35,17 @@ import {PollingService} from "../../polling/services/polling.service";
         `,
     styles: [
         `
+            .notification-item {
+                cursor: pointer;
+                border-bottom:1px solid blue;
+                margin-bottom: 5px;
+                margin-left: 3px;
+            }
+            .notification-item:hover {
+                background-color: deepskyblue;
+            }
             small.notification-age {
                 margin-top: 3px;
-                margin-left: -5px;
                 margin-bottom: -3px;
                 display: block;
             }
