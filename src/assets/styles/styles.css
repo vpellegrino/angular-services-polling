@@ -30,6 +30,10 @@ main {
     float: right;
 }
 
+#loading-message {
+    margin-top: 15px;
+}
+
 footer {
     margin-top: 15px;
 }
