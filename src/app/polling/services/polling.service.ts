@@ -47,10 +47,18 @@ export class PollingService {
         });
     }
 
+    private retrieveServiceItems(serviceName: string): Observable<object> {
+        return this.http.get(this.responsesUrl + serviceName + '?_sort=created_at&_order=desc');
+    }
+
     private simulateServiceUpdate(serviceName: string, serviceVersion: number) {
         const updateDate: string = moment.utc().format(Service.dateFormat);
         this.http.patch(this.responsesUrl+'services/'+serviceName, {"version": ++serviceVersion, "update_at": updateDate})
             .subscribe();
+    }
+
+    private getServices(): Observable<any> {
+        return this.http.get(this.responsesUrl + 'services');
     }
 
     /**
@@ -69,23 +77,6 @@ export class PollingService {
                                 .pipe(takeUntil(destroy$))
                                 .pipe(startWith(0), switchMap(() => this.getServices()))
                                 .subscribe(services => this.checkServicesVersions(services));
-    }
-
-    /**
-     * It provides the list of services for the given application id
-     * @return {Observable<object>}
-     */
-    public getServices(): Observable<any> {
-        return this.http.get(this.responsesUrl + 'services');
-    }
-
-    /**
-     * Retrieves all items related to a particular service
-     * @param {string} serviceName - service name to be called for retrieving related items (e.g. notifications)
-     * @return {Observable<object>}
-     */
-    public retrieveServiceItems(serviceName: string): Observable<object> {
-        return this.http.get(this.responsesUrl + serviceName + '?_sort=created_at&_order=desc');
     }
 
     /**

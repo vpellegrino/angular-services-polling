@@ -17,7 +17,6 @@ Mocked APIs are exposed through JSON Server (https://github.com/typicode/json-se
 1. Install JSON Server
     
     `npm install -g json-server`
-
 2. From project root folder, boot it
     
     `json-server rest-api/db.json`    
@@ -27,8 +26,15 @@ Mocked APIs are exposed through JSON Server (https://github.com/typicode/json-se
 1. Install the Angular CLI
 
     `npm install -g @angular/cli`
-
 1. Run `npm install`
-
 1. Run `npm start`
 
+## Technical details
+
+The angular service which is responsible to orchestrate all business services synchronization is `src/app/polling/services/polling.service.ts`.
+This TypeScript class contains the aim of an injectable service which can be invoked by two methods:
+
+1. `startPolling` it enables polling (if it not yet enabled) for an input service name.
+1. `subscribeToPollingService` for the given service name, it subscribes to each update that will be available for it (e.g. new notifications)
+
+An example of an end angular component which is using these two methods is `navbar-notifications.component.ts`.
