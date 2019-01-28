@@ -7,19 +7,31 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Notification} from "../models/notification";
 import {Observable, of} from "rxjs";
+import {Service} from "../../polling/models/service";
 
 @Injectable()
 export class NotificationsService {
 
     private readonly notificationIconMap: object;
     private mockedNotifications: Notification[];
-    private responsesUrl: string = 'assets/mocked-responses/';
+    private responsesUrl: string = 'http://localhost:3000/';
 
     constructor(private http: HttpClient) {
         moment.locale('it');
         this.notificationIconMap = { APP: 'fa-calendar-check-o', USR: 'fa-user-o', REQ: 'fa-paper-plane-o'};
-        this.http.get(this.responsesUrl + 'notifications.json')
+        this.http.get(this.responsesUrl + 'notifications')
             .subscribe((notifications: Notification[]) => this.mockedNotifications = notifications);
+    }
+
+    /**
+     * Appends a mocked notification, by calling the REST API
+     * Used to simulate the usual notification flow on a web-app
+     */
+    public appendMockedNotification() {
+        const createDate: string = moment.utc().format(Service.dateFormat);
+        const mockedNotification = Notification.buildRandomNotification(createDate);
+        this.http.post(this.responsesUrl + 'notifications', mockedNotification)
+            .subscribe();
     }
 
     /**
@@ -55,7 +67,7 @@ export class NotificationsService {
      * @return {string}
      */
     public displayNotificationAge(createdAt: string): string {
-        return moment(createdAt, 'YYYY-MM-DD HH:mm:ss').fromNow()
+        return moment(createdAt, Service.dateFormat).fromNow()
     }
 
     /**

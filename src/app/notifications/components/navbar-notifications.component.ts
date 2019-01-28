@@ -74,7 +74,11 @@ export class NavbarNotifications implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.pollingService.startPolling('notifications', this.destroy$);
-        this.pollingService.subscribeToPollingService('notifications').subscribe(notifications => this.notifications = notifications);
+        this.pollingService.subscribeToPollingService('notifications')
+            .subscribe(notifications => {
+                this.ns.appendMockedNotification();
+                return this.notifications = notifications;
+            });
     }
 
     ngOnDestroy() {

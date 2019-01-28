@@ -4,6 +4,7 @@
 
 
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import {Injectable} from "@angular/core";
 import {interval, Observable, Subject} from "rxjs";
 import {Service} from "../models/service";
@@ -16,7 +17,7 @@ export class PollingService {
     private pollingInterval: any;
     private servicesVersionMap: Map<string, number>;
     private serviceSubjectMap: Map<string, Subject<any>>;
-    private responsesUrl: string = 'assets/mocked-responses/';
+    private responsesUrl: string = 'http://localhost:3000/';
 
     constructor(private http: HttpClient) {
         this.servicesVersionMap = new Map<string, number>();
@@ -35,17 +36,25 @@ export class PollingService {
 
     private checkServicesVersions(services: Service[]) {
         _.forEach(services, service => {
+            const serviceName = service.name;
+            const serviceVersion = service.version;
             if (this.serviceShouldBeUpdated(service)) {
-                this.retrieveServiceItems(service.name).
-                subscribe(allItems => this.serviceSubjectMap.get(service.name).next(allItems));
-                this.servicesVersionMap.set(service.name, service.version);
+                this.retrieveServiceItems(serviceName)
+                    .subscribe(allItems => this.serviceSubjectMap.get(serviceName).next(allItems));
+                this.servicesVersionMap.set(serviceName, serviceVersion);
             }
+            this.simulateServiceUpdate(serviceName, serviceVersion);
         });
+    }
+
+    private simulateServiceUpdate(serviceName: string, serviceVersion: number) {
+        const updateDate: string = moment.utc().format(Service.dateFormat);
+        this.http.patch(this.responsesUrl+'services/'+serviceName, {"version": ++serviceVersion, "update_at": updateDate})
+            .subscribe();
     }
 
     /**
      * Starts polling on services REST call
-     * @param {number} applicationId - application identifier for which to start polling
      * @param {string} serviceName - the service name
      * @param {Subject<boolean>} destroy$ - this parameter is bound to the component who started the polling (when it gets destroyed, polling stops)
      */
@@ -64,10 +73,10 @@ export class PollingService {
 
     /**
      * It provides the list of services for the given application id
-     * @return {Observable<any>}
+     * @return {Observable<object>}
      */
     public getServices(): Observable<any> {
-        return this.http.get(this.responsesUrl + 'services.json');
+        return this.http.get(this.responsesUrl + 'services');
     }
 
     /**
@@ -76,13 +85,13 @@ export class PollingService {
      * @return {Observable<object>}
      */
     public retrieveServiceItems(serviceName: string): Observable<object> {
-        return this.http.get(this.responsesUrl + serviceName + '.json');
+        return this.http.get(this.responsesUrl + serviceName + '?_sort=created_at&_order=desc');
     }
 
     /**
-     * Provides subscribtion to polling service, in order to keep updated about the service of interest
+     * Provides subscription to polling service, in order to keep updated about the service of interest
      * @param {string} serviceName - the service of interest
-     * @return {Observable<any>}
+     * @return {Observable<object>}
      */
     public subscribeToPollingService(serviceName: string): Observable<any> {
         if (!this.serviceSubjectMap.get(serviceName)) {
@@ -90,4 +99,6 @@ export class PollingService {
         }
         return this.serviceSubjectMap.get(serviceName).asObservable();
     }
+
 }
+
